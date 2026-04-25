@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white border border-outline-variant/30 rounded-xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+    <div class="mb-md">
+        <h2 class="text-2xl font-bold text-on-surface flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-secondary-container/50 text-secondary flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">swap_horiz</span>
+            </span>
+            Transfer Funds
+        </h2>
+    </div>
+    <form action="/reallocate" method="POST" class="space-y-6">
+        <div class="space-y-4">
+                    <div>
+                        <label class="block font-label-md text-on-surface-variant mb-2">From (Source)</label>
+                        <select name="source" required class="w-full bg-surface border border-outline-variant rounded-xl p-4 focus:outline-none focus:border-primary transition-all appearance-none cursor-pointer">
+                            {% for cat in categories %}
+                                <option value="{{ cat.name }}">{{ cat.name }} (₱{{ cat.balance }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="flex justify-center -my-2 relative z-10">
+                        <div class="bg-white rounded-full p-2 shadow-sm border border-outline-variant">
+                            <span class="material-symbols-outlined text-primary">swap_vert</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-label-md text-on-surface-variant mb-2">To (Receiver)</label>
+                        <select name="receiver" required class="w-full bg-surface border border-outline-variant rounded-xl p-4 focus:outline-none focus:border-primary transition-all appearance-none cursor-pointer">
+                            {% for cat in categories %}
+                                <option value="{{ cat.name }}">{{ cat.name }} (₱{{ cat.balance }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block font-label-md text-on-surface-variant mb-2">Amount to Transfer</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">₱</span>
+                        <input type="number" name="amount" required step="0.01" min="0.01" placeholder="0.00" class="w-full bg-surface border border-outline-variant rounded-xl p-4 pl-8 focus:outline-none focus:border-primary transition-all text-2xl font-numeric-display text-primary">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-on-primary font-bold py-4 rounded-xl hover:bg-primary-container transition-all active:scale-[0.98] shadow-md flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">sync_alt</span>
+                    Confirm Transfer
+                </button>
+            </form>
+</div>
+{% endblock %}

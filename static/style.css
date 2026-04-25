@@ -1,0 +1,220 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    width: 350px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+h1,
+h2 {
+    text-align: center;
+    color: #2c5364;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2c5364;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #1e3c4a;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.button-group button {
+    margin-top: 0;
+    /* Remove top margin when in group */
+}
+
+a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #2c5364;
+    font-weight: bold;
+}
+
+.balance {
+    font-size: 22px;
+    text-align: center;
+    margin: 15px 0;
+    color: green;
+}
+
+.flash {
+    color: red;
+    text-align: center;
+}
+
+select {
+    width: 100%;
+    padding: 10px 40px 10px 12px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    font-family: inherit;
+    background-color: white;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    /* Remove default styling */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* Custom arrow */
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%232c5364' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+/* Focus effect */
+select:focus {
+    outline: none;
+    border-color: #2c5364;
+    box-shadow: 0 0 6px rgba(44, 83, 100, 0.4);
+}
+
+.flash {
+    color: red;
+    padding: 8px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.success {
+    color: green;
+    padding: 8px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+    padding: 8px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+th {
+    background-color: #f2f2f2;
+    color: #2c5364;
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid #2c5364;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+.btn-transfer {
+    background: #4a6d7c;
+    color: white !important;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.btn-transfer:hover {
+    background: #3a5d6c;
+}
+
+.btn-logout {
+    background: #d9534f;
+    color: white !important;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.btn-logout:hover {
+    background: #c9302c;
+}
+
+.table-wrapper {
+    max-height: 180px;
+    /* Approximately 3-4 transactions height */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+/* Optional: Make header sticky so it stays at the top while scrolling */
+.table-wrapper thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f2f2f2;
+    z-index: 1;
+}

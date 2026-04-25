@@ -1,0 +1,49 @@
+{
+    "tanafranca.ss@shc.edu.ph": [
+        {
+            "name": "Groceries",
+            "balance": 2300.0,
+            "transaction": [
+                "[2026-04-24T17:11:29] | Spent: \u20b12700.0 (Stock Food & Hygine Materials)"
+            ]
+        },
+        {
+            "name": "Food",
+            "balance": 6870.0,
+            "transaction": [
+                "[2026-04-24T17:12:13] | Spent: \u20b1800.0 (Jollibee Take-out)",
+                "[2026-04-24T17:14:17] | Added Funds: \u20b1300.0",
+                "[2026-04-24T17:23:33] | Added Funds: \u20b1300.0",
+                "[2026-04-24T17:24:14] | Spent: \u20b1730.0 (Kain sa City Coast)",
+                "[2026-04-24T17:25:10] | Spent: \u20b1300.0 (Samgyup)",
+                "[2026-04-24T17:30:37] | Received \u20b1100.0 from Bills"
+            ]
+        },
+        {
+            "name": "Bills",
+            "balance": 10900.0,
+            "transaction": [
+                "[2026-04-24T17:13:11] | Spent: \u20b14000.0 (House Rent)",
+                "[2026-04-24T17:30:37] | Reallocated \u20b1100.0 to Food"
+            ]
+        },
+        {
+            "name": "Shopping",
+            "balance": 17720.0,
+            "transaction": [
+                "[2026-04-24T17:21:37] | Spent: \u20b1350.0 (Nike Shoe Bag)",
+                "[2026-04-24T17:22:49] | Spent: \u20b12500.0 (Converse Shoes)",
+                "[2026-04-24T17:25:36] | Added Funds: \u20b1570.0"
+            ]
+        },
+        {
+            "name": "Transpo",
+            "balance": 4160.0,
+            "transaction": [
+                "[2026-04-24T17:13:47] | Spent: \u20b1390.0 (Motor Full Tank)",
+                "[2026-04-24T17:22:06] | Added Funds: \u20b150.0"
+            ]
+        }
+    ],
+    "tanafrancasam@gmail.com": []
+}

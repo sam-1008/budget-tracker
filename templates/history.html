@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white border border-outline-variant/30 rounded-xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+    <div class="flex justify-between items-center mb-md">
+        <h2 class="text-2xl font-bold text-on-surface flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+            </span>
+            Activity History
+        </h2>
+        <div class="flex gap-2">
+            <a href="/download_report" class="font-label-sm text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20">CSV</a>
+            <a href="/download_pdf_report" class="font-label-sm text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20">PDF</a>
+            <button type="button" onclick="toggleClearHistoryModal()" class="font-label-sm text-error bg-error-container/30 px-3 py-1.5 rounded-md hover:bg-error-container/50 flex items-center justify-center" title="Clear All History">
+                <span class="material-symbols-outlined text-[18px]">delete_sweep</span>
+            </button>
+        </div>
+    </div>
+    <div class="space-y-sm">
+        {% for tx in transactions %}
+            <div class="flex items-center justify-between py-3 border-b border-surface-container-low last:border-0">
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-full {% if tx.type == 'spent' %}bg-orange-50{% elif tx.type == 'reallocated' %}bg-blue-50{% else %}bg-secondary-container/30{% endif %} flex items-center justify-center">
+                        <span class="material-symbols-outlined {% if tx.type == 'spent' %}text-orange-600{% elif tx.type == 'reallocated' %}text-blue-600{% else %}text-secondary{% endif %}">
+                            {% if tx.type == 'spent' %}receipt{% elif tx.type == 'reallocated' %}sync_alt{% else %}account_balance_wallet{% endif %}
+                        </span>
+                    </div>
+                    <div>
+                        <p class="font-label-md text-on-surface">{{ tx.detail }}</p>
+                        <p class="text-[12px] text-on-surface-variant">{{ tx.date.split('T')[0] }} • {{ tx.category }}</p>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-on-surface-variant text-center py-4">No transactions recorded yet.</p>
+        {% endfor %}
+        
+        {% if total_pages > 1 %}
+        <div class="flex justify-between items-center mt-md pt-4 border-t border-outline-variant/30">
+            {% if page > 1 %}
+                <a href="/history?page={{ page - 1 }}" class="font-label-sm text-primary hover:bg-primary/5 px-3 py-2 rounded-md transition-colors flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[18px]">chevron_left</span> Prev
+                </a>
+            {% else %}
+                <div class="w-[80px]"></div>
+            {% endif %}
+            
+            <span class="text-sm text-on-surface-variant font-medium">Page {{ page }} of {{ total_pages }}</span>
+            
+            {% if page < total_pages %}
+                <a href="/history?page={{ page + 1 }}" class="font-label-sm text-primary hover:bg-primary/5 px-3 py-2 rounded-md transition-colors flex items-center gap-1">
+                    Next <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                </a>
+            {% else %}
+                <div class="w-[80px]"></div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Clear History Modal -->
+<div id="clearHistoryModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-on-surface/40 backdrop-blur-sm" onclick="toggleClearHistoryModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm p-margin-mobile">
+        <div class="bg-surface rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div class="p-lg bg-white text-center space-y-4">
+                <div class="w-16 h-16 rounded-full bg-error-container text-error mx-auto flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined text-3xl">delete_sweep</span>
+                </div>
+                <h2 class="font-headline-sm text-on-surface">Clear History?</h2>
+                <p class="text-on-surface-variant text-sm">Are you sure you want to delete all recorded transactions? This action cannot be undone.</p>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="toggleClearHistoryModal()" class="flex-1 py-3 font-label-md font-bold text-on-surface-variant bg-surface-container hover:bg-surface-container-highest rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <a href="/clear_history" class="flex-1 py-3 font-label-md font-bold text-white bg-error hover:bg-error/90 rounded-lg transition-colors shadow-sm flex items-center justify-center">
+                        Clear All
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleClearHistoryModal() {
+        const modal = document.getElementById('clearHistoryModal');
+        modal.classList.toggle('hidden');
+        document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>FinTrack Budget</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "secondary-container": "#6bfe9c",
+                "on-tertiary-fixed-variant": "#004b73",
+                "on-tertiary-container": "#95cdff",
+                "error-container": "#ffdad6",
+                "tertiary-fixed": "#cce5ff",
+                "primary-fixed-dim": "#8cd6ad",
+                "tertiary": "#004063",
+                "background": "#f8f9fa",
+                "outline-variant": "#bfc9c0",
+                "on-secondary-fixed-variant": "#005228",
+                "surface-container-highest": "#e1e3e4",
+                "error": "#ba1a1a",
+                "secondary-fixed": "#6bfe9c",
+                "on-primary-fixed": "#002112",
+                "on-primary-container": "#8dd7ae",
+                "tertiary-container": "#005886",
+                "primary": "#00462c",
+                "primary-fixed": "#a8f3c8",
+                "inverse-on-surface": "#f0f1f2",
+                "on-surface-variant": "#3f4942",
+                "on-tertiary-fixed": "#001d31",
+                "on-primary": "#ffffff",
+                "surface-container-high": "#e7e8e9",
+                "on-error-container": "#93000a",
+                "primary-container": "#0e5f3f",
+                "surface-tint": "#1f6b4a",
+                "tertiary-fixed-dim": "#92ccff",
+                "secondary": "#006d37",
+                "inverse-primary": "#8cd6ad",
+                "on-surface": "#191c1d",
+                "inverse-surface": "#2e3132",
+                "on-background": "#191c1d",
+                "surface-bright": "#f8f9fa",
+                "surface-variant": "#e1e3e4",
+                "on-tertiary": "#ffffff",
+                "on-primary-fixed-variant": "#005234",
+                "on-secondary-container": "#00743a",
+                "on-secondary-fixed": "#00210c",
+                "on-error": "#ffffff",
+                "surface-dim": "#d9dadb",
+                "on-secondary": "#ffffff",
+                "surface-container-low": "#f3f4f5",
+                "outline": "#6f7972",
+                "surface": "#f8f9fa",
+                "surface-container": "#edeeef",
+                "surface-container-lowest": "#ffffff",
+                "secondary-fixed-dim": "#4ae183"
+              },
+              "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+              "spacing": { "sm": "8px", "gutter": "12px", "unit": "4px", "xs": "4px", "md": "16px", "lg": "24px", "xl": "32px", "margin-mobile": "20px" },
+              "fontFamily": {
+                "headline-sm": ["Manrope"], "headline-lg": ["Manrope"], "numeric-display": ["Manrope"], "body-lg": ["Manrope"], "body-md": ["Manrope"], "label-md": ["Inter"], "headline-md": ["Manrope"], "label-sm": ["Inter"]
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #f8f9fa; min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased">
+    {% set show_nav = session.get('user') and request.endpoint not in ['login', 'register', 'index'] %}
+    
+    {% if show_nav %}
+    <!-- TopAppBar Shell -->
+    <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-5 h-16 bg-white dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shadow-sm border border-primary/5">
+                <span class="material-symbols-outlined text-[24px]">savings</span>
+            </div>
+            <h1 class="font-manrope text-xl font-extrabold text-emerald-900 dark:text-emerald-400 tracking-tight">FinTrack</h1>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="flex flex-col items-end">
+                <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Active Account</p>
+                <p class="font-manrope text-sm font-bold text-emerald-900">{{ session.get('username', 'User') }}</p>
+            </div>
+            <a href="/logout" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors active:scale-95 duration-150">
+                <span class="material-symbols-outlined text-emerald-900 dark:text-emerald-400">logout</span>
+            </a>
+        </div>
+    </header>
+    {% endif %}
+
+    <main class="{% if show_nav %}pt-20 pb-28{% else %}flex flex-col items-center justify-center min-h-screen{% endif %} px-margin-mobile max-w-5xl mx-auto space-y-lg">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="w-full max-w-lg space-y-2 mb-4">
+                {% for category, message in messages %}
+                    {% if category == 'error' %}
+                        <div class="flash-message bg-error-container text-on-error-container p-4 rounded-lg flex items-center gap-2 font-label-md transition-all duration-500 shadow-sm border border-error/10">
+                            <span class="material-symbols-outlined">error</span>
+                            {{ message }}
+                        </div>
+                    {% elif category == 'warning' %}
+                        <div class="flash-message bg-[#fff3cd] text-[#856404] p-4 rounded-lg flex items-center gap-2 font-label-md transition-all duration-500 shadow-sm border border-yellow-200">
+                            <span class="material-symbols-outlined">warning</span>
+                            {{ message }}
+                        </div>
+                    {% else %}
+                        <div class="flash-message bg-secondary-container text-on-secondary-container p-4 rounded-lg flex items-center gap-2 font-label-md transition-all duration-500 shadow-sm border border-secondary/10">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if show_nav %}
+    <!-- BottomNavBar Shell -->
+    <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 px-2 pb-safe bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] z-50">
+        {% set dash_class = 'text-emerald-800 bg-emerald-50/50 rounded-xl px-3 py-1' if request.path == '/dashboard' else 'text-gray-400 hover:text-emerald-700' %}
+        <a href="/dashboard" class="flex flex-col items-center justify-center {{ dash_class }} transition-transform">
+            <span class="material-symbols-outlined" {% if request.path == '/dashboard' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>dashboard</span>
+            <span class="font-manrope text-[10px] font-medium mt-1">Dashboard</span>
+        </a>
+
+        {% set hist_class = 'text-emerald-800 bg-emerald-50/50 rounded-xl px-3 py-1' if request.path == '/history' else 'text-gray-400 hover:text-emerald-700' %}
+        <a href="/history" class="flex flex-col items-center justify-center {{ hist_class }} transition-transform">
+            <span class="material-symbols-outlined" {% if request.path == '/history' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>receipt_long</span>
+            <span class="font-manrope text-[10px] font-medium mt-1">Activity</span>
+        </a>
+
+        {% set add_class = 'text-emerald-800 bg-emerald-50/50 rounded-xl px-3 py-1' if request.path == '/add_transaction' else 'text-gray-400 hover:text-emerald-700' %}
+        <a href="/add_transaction" class="flex flex-col items-center justify-center {{ add_class }} transition-transform">
+            <span class="material-symbols-outlined" {% if request.path == '/add_transaction' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>add_circle</span>
+            <span class="font-manrope text-[10px] font-medium mt-1">Add</span>
+        </a>
+
+        {% set realloc_class = 'text-emerald-800 bg-emerald-50/50 rounded-xl px-3 py-1' if request.path == '/reallocate' else 'text-gray-400 hover:text-emerald-700' %}
+        <a href="/reallocate" class="flex flex-col items-center justify-center {{ realloc_class }} transition-transform">
+            <span class="material-symbols-outlined" {% if request.path == '/reallocate' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>sync_alt</span>
+            <span class="font-manrope text-[10px] font-medium mt-1">Transfer</span>
+        </a>
+    </nav>
+    {% endif %}
+    <script>
+        // Auto-dismiss flash messages after 3 seconds
+        setTimeout(() => {
+            const flashes = document.querySelectorAll('.flash-message');
+            flashes.forEach(flash => {
+                flash.style.opacity = '0';
+                flash.style.transform = 'translateY(-10px)';
+                setTimeout(() => flash.remove(), 500);
+            });
+        }, 3000);
+    </script>
+</body>
+</html>

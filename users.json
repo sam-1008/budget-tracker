@@ -1,0 +1,14 @@
+[
+    {
+        "full_name": "Sam Tanafranca",
+        "username": "Sam",
+        "email": "tanafranca.ss@shc.edu.ph",
+        "pin_hash": "scrypt:32768:8:1$h3F9i1OC2dzRQFND$503676c34b51e862ea647fbee51272da4da85922ff8a98eb265e41a0c47000cee7442806cbfcae6e24e8f3856261c4c2f1bcaaaeaf58fc94853c4feb3be12058"
+    },
+    {
+        "full_name": "Trippy Head",
+        "username": "Trippy",
+        "email": "tanafrancasam@gmail.com",
+        "pin_hash": "scrypt:32768:8:1$WFwgSJNHu9QhFzQt$cee4478bc178306ce8753bbbcb0ac5cf525ada64f8712fea2b381dac6122f5b9dc61bc24c41e1ee5fb41b1b682a4305261599fa2c8dc596e8464306ec583a0e6"
+    }
+]

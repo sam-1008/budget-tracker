@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="relative min-h-[80vh] flex flex-col items-center justify-center py-20 overflow-hidden">
+    <!-- Decorative Background Elements -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full opacity-30 pointer-events-none">
+        <div class="absolute top-10 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="relative z-10 text-center max-w-3xl mx-auto px-6">
+        <div class="flex flex-col items-center gap-6 mb-12 animate-in fade-in slide-in-from-bottom-10 duration-1000">
+            <div class="w-20 h-20 rounded-3xl bg-white shadow-2xl flex items-center justify-center text-primary border border-primary/5 ring-8 ring-primary/5">
+                <span class="material-symbols-outlined text-[48px] font-bold">savings</span>
+            </div>
+            <div>
+                <h1 class="font-manrope text-5xl md:text-7xl font-black text-emerald-900 tracking-tight leading-none mb-4">
+                    Fin<span class="text-primary">Track</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-on-surface-variant font-medium max-w-xl mx-auto leading-relaxed">
+                    The premium budget tracker designed for high-precision financial control.
+                </p>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20 animate-in fade-in slide-in-from-bottom-10 delay-300 duration-1000">
+            <a href="/register" class="w-full sm:w-auto px-10 py-5 bg-primary text-on-primary rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 hover:bg-primary-container hover:scale-105 transition-all active:scale-95 flex items-center justify-center gap-2">
+                Get Started
+                <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+            <a href="/login" class="w-full sm:w-auto px-10 py-5 bg-white text-primary border-2 border-primary/10 rounded-2xl font-bold text-lg hover:bg-primary/5 hover:border-primary/20 transition-all flex items-center justify-center">
+                Sign In
+            </a>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-10 delay-500 duration-1000">
+            <div class="p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm text-left">
+                <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined">insights</span>
+                </div>
+                <h3 class="font-bold text-lg text-emerald-900 mb-2">Real-time Analytics</h3>
+                <p class="text-sm text-on-surface-variant leading-relaxed">Track your income utilization and spending patterns with precision.</p>
+            </div>
+            <div class="p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm text-left">
+                <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined">sync_alt</span>
+                </div>
+                <h3 class="font-bold text-lg text-emerald-900 mb-2">Smart Reallocation</h3>
+                <p class="text-sm text-on-surface-variant leading-relaxed">Move funds between categories instantly with our refined transfer system.</p>
+            </div>
+            <div class="p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm text-left">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined">notifications_active</span>
+                </div>
+                <h3 class="font-bold text-lg text-emerald-900 mb-2">Intelligent Alerts</h3>
+                <p class="text-sm text-on-surface-variant leading-relaxed">Stay informed with automatic email notifications for budget updates.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-20 pt-10 border-t border-emerald-900/5 text-center animate-in fade-in duration-1000 delay-700">
+            <p class="text-sm font-medium text-on-surface-variant/60 tracking-wide">
+                &copy; FinTrack 2026. All rights reserved. 
+                <span class="mx-2 text-primary/30">•</span> 
+                Developed by: <span class="text-emerald-900 font-bold">Sam Tañafranca</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Bottom Footer Gradient -->
+    <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+</div>
+{% endblock %}

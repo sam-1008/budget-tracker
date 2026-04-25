@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Greeting & Real-time Clock Section -->
+<div class="mb-lg flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div>
+        <h1 class="text-3xl font-extrabold text-emerald-900 tracking-tight font-manrope">
+            Hello, <span class="text-primary">{{ session.get('username', 'Guest') }}</span>!
+        </h1>
+        <p class="text-on-surface-variant font-body-md mt-1">Here's what's happening with your budget today.</p>
+    </div>
+    <div class="flex flex-col items-start md:items-end">
+        <div class="flex items-center gap-2 text-primary">
+            <span class="material-symbols-outlined text-[20px]">schedule</span>
+            <p id="live-time" class="font-manrope text-2xl font-bold tracking-tight text-emerald-900">00:00:00 AM</p>
+        </div>
+        <p id="live-date" class="text-sm font-bold text-on-surface-variant/80 uppercase tracking-widest mt-1">
+            Friday, April 24, 2026
+        </p>
+    </div>
+</div>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+
+        // Update Time
+        const timeOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        };
+        document.getElementById('live-time').textContent = now.toLocaleTimeString('en-US', timeOptions);
+
+        // Update Date
+        const dateOptions = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', dateOptions);
+    }
+
+    // Update immediately and then every second
+    updateClock();
+    setInterval(updateClock, 1000);
+</script>
+
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+
+    <!-- Monthly Summary Card -->
+    <div
+        class="md:col-span-12 bg-white border border-outline-variant/30 rounded-xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+        <div class="flex justify-between items-center mb-md">
+            <h2 class="text-2xl font-bold text-on-surface flex items-center gap-2">
+                <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[20px]">monitoring</span>
+                </span>
+                Financial Summary
+            </h2>
+            <div class="flex items-center gap-2">
+                <select onchange="window.location.href='/dashboard?filter=' + this.value"
+                    class="font-label-sm text-on-surface-variant bg-surface-container rounded-lg px-2 py-1 focus:outline-none focus:border-primary cursor-pointer border-none outline-none">
+                    <option value="1d" {% if current_filter=='1d' %}selected{% endif %}>1 day ago</option>
+                    <option value="3d" {% if current_filter=='3d' %}selected{% endif %}>3 days ago</option>
+                    <option value="7d" {% if current_filter=='7d' %}selected{% endif %}>7 days ago</option>
+                    <option value="30d" {% if current_filter=='30d' %}selected{% endif %}>30 days ago</option>
+                    <option value="1y" {% if current_filter=='1y' %}selected{% endif %}>1 year</option>
+                    <option value="all" {% if current_filter=='all' %}selected{% endif %}>All time</option>
+                </select>
+                <button type="button" onclick="toggleResetDataModal()"
+                    class="text-error hover:bg-error-container/50 p-1 rounded-md transition-colors flex items-center justify-center"
+                    title="Reset All Data">
+                    <span class="material-symbols-outlined text-[18px]">cleaning_services</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="mb-lg pb-md border-b border-surface-container-low space-y-1">
+            <p class="font-label-md text-on-surface-variant">Current Balance</p>
+            <div class="flex items-baseline gap-2">
+                <span class="font-numeric-display text-primary text-3xl font-bold">₱{{ '{:,.2f}'.format(total_balance)
+                    }}</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-lg">
+            <div class="space-y-xs">
+                <div class="flex items-center gap-2 text-secondary">
+                    <span class="material-symbols-outlined text-[20px]">arrow_downward</span>
+                    <span class="font-label-md">Total Income</span>
+                </div>
+                <p class="font-headline-md text-on-surface">₱{{ '{:,.2f}'.format(total_income) }}</p>
+            </div>
+            <div class="space-y-xs">
+                <div class="flex items-center gap-2 text-error">
+                    <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+                    <span class="font-label-md">Total Spent</span>
+                </div>
+                <p class="font-headline-md text-on-surface">₱{{ '{:,.2f}'.format(total_spent) }}</p>
+            </div>
+        </div>
+        <div class="mt-lg">
+            {% set progress = (total_spent / summary_income * 100) if summary_income > 0 else 0 %}
+            <div class="flex justify-between font-label-sm mb-2">
+                <span class="text-on-surface-variant">Income Utilization</span>
+                <span class="text-on-surface">{{ '{:.1f}'.format(progress) }}% used</span>
+            </div>
+            {% set bar_width = progress if progress <= 100 else 100 %} {% set style_attr='style="width: ' ~ bar_width
+                ~ '%;"' %} <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+                {% if progress >= 100 %}
+                <div class="h-full bg-error rounded-full transition-all duration-1000" {{ style_attr|safe }}></div>
+                {% elif progress > 80 %}
+                <div class="h-full bg-error-container rounded-full transition-all duration-1000" {{ style_attr|safe }}>
+                </div>
+                {% else %}
+                <div class="h-full bg-secondary rounded-full transition-all duration-1000" {{ style_attr|safe }}></div>
+                {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Spending by Category -->
+<div
+    class="md:col-span-5 bg-white border border-outline-variant/30 rounded-xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+    <div class="flex justify-between items-center mb-lg">
+        <h2 class="text-2xl font-bold text-on-surface flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-secondary-container/50 text-secondary flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">category</span>
+            </span>
+            Category
+        </h2>
+    </div>
+    <div class="space-y-md">
+        {% for cat in categories %}
+        <div
+            class="group flex items-center justify-between p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-sm">
+                    {{ loop.index }}
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <p class="font-label-md text-on-surface">{{ cat.name }}</p>
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="openEditModal('{{ cat.name }}', '{{ cat.balance }}')"
+                                class="text-primary hover:text-primary-container transition-colors" title="Edit">
+                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                            </button>
+                            <button type="button" onclick="openDeleteModal('{{ cat.name }}')"
+                                class="text-error hover:text-error-container transition-colors" title="Delete">
+                                <span class="material-symbols-outlined text-[18px]">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="font-label-md font-bold">₱{{ cat.balance }}</p>
+        </div>
+        {% else %}
+        <p class="text-on-surface-variant text-sm">No categories yet. Click 'Add Category' to get started.</p>
+        {% endfor %}
+    </div>
+
+    <button onclick="toggleCreateCategoryModal()"
+        class="block w-full mt-lg py-3 text-center font-label-md text-primary border border-primary/20 rounded-lg hover:bg-primary/5 transition-colors">
+        Add Category
+    </button>
+</div>
+
+<!-- Recent Transactions -->
+<div
+    class="md:col-span-7 bg-white border border-outline-variant/30 rounded-xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+    <div class="flex justify-between items-center mb-lg">
+        <h2 class="text-2xl font-bold text-on-surface flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-tertiary-container/50 text-tertiary flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">history</span>
+            </span>
+            Recent Transactions
+        </h2>
+    </div>
+    <div class="space-y-sm">
+        {% for tx in recent_transactions %}
+        <div class="flex items-center justify-between py-2 border-b border-surface-container-low last:border-0">
+            <div class="flex items-center gap-4">
+                <div
+                    class="w-11 h-11 rounded-full {% if tx.type == 'spent' %}bg-orange-50{% elif tx.type == 'reallocated' %}bg-blue-50{% else %}bg-secondary-container/30{% endif %} flex items-center justify-center">
+                    <span
+                        class="material-symbols-outlined {% if tx.type == 'spent' %}text-orange-600{% elif tx.type == 'reallocated' %}text-blue-600{% else %}text-secondary{% endif %}">
+                        {% if tx.type == 'spent' %}receipt{% elif tx.type == 'reallocated' %}sync_alt{% else
+                        %}account_balance_wallet{% endif %}
+                    </span>
+                </div>
+                <div>
+                    <p class="font-label-md text-on-surface">{{ tx.detail }}</p>
+                    <p class="text-[12px] text-on-surface-variant">{{ tx.date.split('T')[0] }} • {{ tx.category }}</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-on-surface-variant text-sm">No transactions yet.</p>
+        {% endfor %}
+    </div>
+</div>
+</div>
+
+
+<!-- Edit Category Modal -->
+<div id="editCategoryModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-on-surface/40 backdrop-blur-sm" onclick="toggleEditModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl p-margin-mobile">
+        <div class="bg-surface rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div class="p-lg border-b border-outline-variant/30 flex justify-between items-center bg-white">
+                <h2 class="font-headline-sm text-on-surface">Edit Category</h2>
+                <button type="button" onclick="toggleEditModal()"
+                    class="text-on-surface-variant hover:text-on-surface transition-colors p-1 rounded-full hover:bg-surface-container-highest flex items-center justify-center">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-lg bg-white">
+                <form id="editCategoryForm" method="POST" class="space-y-6">
+                    <div>
+                        <label class="block font-label-md text-on-surface-variant mb-1">Category Name</label>
+                        <input type="text" id="editCategoryNameInput" name="name" required
+                            class="w-full bg-surface border border-outline-variant rounded-lg p-3 focus:outline-none focus:border-primary transition-all">
+                    </div>
+                    <div>
+                        <label class="block font-label-md text-on-surface-variant mb-1">Budget Amount (₱)</label>
+                        <input type="number" id="editCategoryBalanceInput" name="balance" required step="0.01" min="0"
+                            class="w-full bg-surface border border-outline-variant rounded-lg p-3 focus:outline-none focus:border-primary transition-all text-xl font-numeric-display text-primary">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-primary text-on-primary font-label-md py-3 rounded-lg font-bold hover:bg-primary-container transition-colors shadow-sm">
+                        Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Category Modal -->
+<div id="deleteCategoryModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-on-surface/40 backdrop-blur-sm" onclick="toggleDeleteModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm p-margin-mobile">
+        <div class="bg-surface rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div class="p-lg bg-white text-center space-y-4">
+                <div
+                    class="w-16 h-16 rounded-full bg-error-container text-error mx-auto flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined text-3xl">delete_forever</span>
+                </div>
+                <h2 class="font-headline-sm text-on-surface">Delete Category?</h2>
+                <p class="text-on-surface-variant text-sm">Are you sure you want to delete <span
+                        id="deleteCategoryNameDisplay" class="font-bold"></span>? This action cannot be undone.</p>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="toggleDeleteModal()"
+                        class="flex-1 py-3 font-label-md font-bold text-on-surface-variant bg-surface-container hover:bg-surface-container-highest rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <a href="#" id="confirmDeleteBtn"
+                        class="flex-1 py-3 font-label-md font-bold text-white bg-error hover:bg-error/90 rounded-lg transition-colors shadow-sm flex items-center justify-center">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Category Modal -->
+<div id="createCategoryModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-on-surface/40 backdrop-blur-sm" onclick="toggleCreateCategoryModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl p-margin-mobile">
+        <div class="bg-surface rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div class="p-lg border-b border-outline-variant/30 flex justify-between items-center bg-white">
+                <h2 class="font-headline-sm text-on-surface">Add Category</h2>
+                <button type="button" onclick="toggleCreateCategoryModal()"
+                    class="text-on-surface-variant hover:text-on-surface transition-colors p-1 rounded-full hover:bg-surface-container-highest flex items-center justify-center">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-lg bg-white">
+                <form action="/create_category" method="POST" class="space-y-6">
+                    <div>
+                        <label class="block font-label-md text-on-surface-variant mb-1">Category Name</label>
+                        <input type="text" name="name" required placeholder="e.g. Groceries"
+                            class="w-full bg-surface border border-outline-variant rounded-lg p-3 focus:outline-none focus:border-primary transition-all">
+                    </div>
+                    <div>
+                        <label class="block font-label-md text-on-surface-variant mb-1">Initial Budget (₱)</label>
+                        <input type="number" name="balance" required step="0.01" min="0" placeholder="0.00"
+                            class="w-full bg-surface border border-outline-variant rounded-lg p-3 focus:outline-none focus:border-primary transition-all text-xl font-numeric-display text-primary">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-primary text-on-primary font-label-md py-3 rounded-lg font-bold hover:bg-primary-container transition-colors shadow-sm">
+                        Create Category
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reset Data Modal -->
+<div id="resetDataModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-on-surface/60 backdrop-blur-md" onclick="toggleResetDataModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm p-margin-mobile">
+        <div
+            class="bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 border-2 border-error/20">
+            <div class="p-lg text-center space-y-4">
+                <div
+                    class="w-20 h-20 rounded-full bg-error text-white mx-auto flex items-center justify-center mb-6 shadow-lg shadow-error/30">
+                    <span class="material-symbols-outlined text-4xl font-bold">warning</span>
+                </div>
+                <p class="text-[10px] font-black tracking-widest text-error uppercase">Critical Warning</p>
+                <h3 class="text-xl font-bold text-on-surface">Factory Reset?</h3>
+                <p class="text-on-surface-variant text-sm leading-relaxed px-2">
+                    This action is <span class="text-error font-bold underline">permanent</span>. All balances and
+                    transaction logs will be <span class="font-bold">completely wiped</span> from the system.
+                </p>
+                <div class="flex flex-col gap-3 pt-6">
+                    <a href="/reset_all_data"
+                        class="w-full py-4 font-bold text-white bg-error hover:bg-error/90 rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-xl">delete_forever</span>
+                        Permanently Reset
+                    </a>
+                    <button type="button" onclick="toggleResetDataModal()"
+                        class="w-full py-3 font-bold text-on-surface-variant bg-surface-container hover:bg-surface-container-highest rounded-xl transition-colors">
+                        Keep My Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function openEditModal(name, balance) {
+        const form = document.getElementById('editCategoryForm');
+        form.action = `/edit_category/${name}`;
+        document.getElementById('editCategoryNameInput').value = name;
+        document.getElementById('editCategoryBalanceInput').value = balance;
+        toggleEditModal();
+    }
+
+    function toggleEditModal() {
+        const modal = document.getElementById('editCategoryModal');
+        modal.classList.toggle('hidden');
+        document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
+    }
+
+    function openDeleteModal(name) {
+        document.getElementById('deleteCategoryNameDisplay').textContent = name;
+        document.getElementById('confirmDeleteBtn').href = `/delete_category/${name}`;
+        toggleDeleteModal();
+    }
+
+    function toggleDeleteModal() {
+        const modal = document.getElementById('deleteCategoryModal');
+        modal.classList.toggle('hidden');
+        document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
+    }
+
+    function toggleCreateCategoryModal() {
+        const modal = document.getElementById('createCategoryModal');
+        modal.classList.toggle('hidden');
+        document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
+    }
+
+    function toggleResetDataModal() {
+        const modal = document.getElementById('resetDataModal');
+        modal.classList.toggle('hidden');
+        document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
+    }
+</script>
+{% endblock %}
