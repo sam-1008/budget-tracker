@@ -10,5 +10,17 @@
         "username": "Trippy",
         "email": "tanafrancasam@gmail.com",
         "pin_hash": "scrypt:32768:8:1$WFwgSJNHu9QhFzQt$cee4478bc178306ce8753bbbcb0ac5cf525ada64f8712fea2b381dac6122f5b9dc61bc24c41e1ee5fb41b1b682a4305261599fa2c8dc596e8464306ec583a0e6"
+    },
+    {
+        "full_name": "jas",
+        "username": "jas",
+        "email": "j@gmail.com",
+        "pin_hash": "scrypt:32768:8:1$AljlSyWki5dA49VM$ced9e33a24e4a8a4266cda70a1dab2422bec81e10bd69bf1fe34d5d44a7a6d365a3dd292e94bb11a405e992c573258da541dfdf72b2c589ac8aa4e69d143760d"
+    },
+    {
+        "full_name": "jasper",
+        "username": "jsp21",
+        "email": "kl@gmail.com",
+        "pin_hash": "scrypt:32768:8:1$jJfL4RpukTPGwdGJ$c5eaf1dda06cba75edf10a35902ba03d1dd9653b09f116fede32eee93d4a4fbe82f78634269e768631facba38b0ab9c3ce4cd9e771696115d5c772dd0a103ce0"
     }
 ]

@@ -2,21 +2,26 @@
     "tanafranca.ss@shc.edu.ph": [
         {
             "name": "Groceries",
-            "balance": 2300.0,
+            "balance": 0.0,
             "transaction": [
-                "[2026-04-24T17:11:29] | Spent: \u20b12700.0 (Stock Food & Hygine Materials)"
+                "[2026-04-24T17:11:29] | Spent: \u20b12700.0 (Stock Food & Hygine Materials)",
+                "[2026-04-25T11:02:48] | Received \u20b1500.0 from Food",
+                "[2026-04-25T11:15:39] | Spent: \u20b12500.0 (gsagygsa)",
+                "[2026-04-25T11:16:08] | Spent: \u20b1210.0 (haha)",
+                "[2026-04-25T11:16:28] | Spent: \u20b190.0 (bsja)"
             ]
         },
         {
             "name": "Food",
-            "balance": 6870.0,
+            "balance": 6370.0,
             "transaction": [
                 "[2026-04-24T17:12:13] | Spent: \u20b1800.0 (Jollibee Take-out)",
                 "[2026-04-24T17:14:17] | Added Funds: \u20b1300.0",
                 "[2026-04-24T17:23:33] | Added Funds: \u20b1300.0",
                 "[2026-04-24T17:24:14] | Spent: \u20b1730.0 (Kain sa City Coast)",
                 "[2026-04-24T17:25:10] | Spent: \u20b1300.0 (Samgyup)",
-                "[2026-04-24T17:30:37] | Received \u20b1100.0 from Bills"
+                "[2026-04-24T17:30:37] | Received \u20b1100.0 from Bills",
+                "[2026-04-25T11:02:48] | Reallocated \u20b1500.0 to Groceries"
             ]
         },
         {
@@ -38,12 +43,37 @@
         },
         {
             "name": "Transpo",
-            "balance": 4160.0,
+            "balance": 4100.0,
             "transaction": [
                 "[2026-04-24T17:13:47] | Spent: \u20b1390.0 (Motor Full Tank)",
-                "[2026-04-24T17:22:06] | Added Funds: \u20b150.0"
+                "[2026-04-24T17:22:06] | Added Funds: \u20b150.0",
+                "[2026-04-25T11:03:41] | Spent: \u20b160.0 (pang gas)"
+            ]
+        },
+        {
+            "name": "Others",
+            "balance": 200.0,
+            "transaction": [
+                "[2026-04-25T11:01:23] | Added Funds: \u20b1100.0"
             ]
         }
     ],
-    "tanafrancasam@gmail.com": []
+    "tanafrancasam@gmail.com": [],
+    "j@gmail.com": [],
+    "kl@gmail.com": [
+        {
+            "name": "Rent",
+            "balance": 6000.0,
+            "transaction": [
+                "[2026-04-25T11:13:59] | Received \u20b11000.0 from Allowance"
+            ]
+        },
+        {
+            "name": "Allowance",
+            "balance": 1500.0,
+            "transaction": [
+                "[2026-04-25T11:13:59] | Reallocated \u20b11000.0 to Rent"
+            ]
+        }
+    ]
 }
